@@ -18,8 +18,11 @@ app.get('/', (req, res) => {
 
 // 顯示 todo 清單頁	
 app.get('/todos', (req, res) => {
-  return Todo.findAll()
-    .then((todos) => res.send({ todos }))
+  return Todo.findAll({
+    attributes: ['id', 'name'],
+    raw: true
+  })
+    .then((todos) => res.render('todos', { todos }))
     .catch((err) => res.status(422).json(err))
 })
 
