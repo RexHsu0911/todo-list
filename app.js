@@ -1,19 +1,26 @@
 const express = require('express')
 const app = express()
 const port = 3000
+const { engine } = require('express-handlebars')
 
 const db = require('./models')
 const Todo = db.Todo
 
+app.engine('.hbs', engine({
+  extname: '.hbs'
+}))
+app.set('view engine', '.hbs')
+app.set('views', './views')
+
 app.get('/', (req, res) => {
-  res.send('hello world')
+  res.render('index')
 })
 
 // 顯示 todo 清單頁	
 app.get('/todos', (req, res) => {
   return Todo.findAll()
-            .then((todos) => res.send({ todos}))
-            .catch((err) => res.status(422).json(err))
+    .then((todos) => res.send({ todos }))
+    .catch((err) => res.status(422).json(err))
 })
 
 // 新增 todo 頁
