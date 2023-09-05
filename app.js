@@ -2,13 +2,18 @@ const express = require('express')
 const app = express()
 const port = 3000
 
+const db = require('./models')
+const Todo = db.Todo
+
 app.get('/', (req, res) => {
   res.send('hello world')
 })
 
 // 顯示 todo 清單頁	
 app.get('/todos', (req, res) => {
-  res.send('get all todos')
+  return Todo.findAll()
+            .then((todos) => res.send({ todos}))
+            .catch((err) => res.status(422).json(err))
 })
 
 // 新增 todo 頁
