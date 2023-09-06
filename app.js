@@ -37,13 +37,19 @@ app.get('/todos/new', (req, res) => {
 app.post('/todos', (req, res) => {
   const name = req.body.name
   return Todo.create({ name })
-            .then(() => res.redirect('/todos'))
-            .catch((err) => console.log(err))
+    .then(() => res.redirect('/todos'))
+    .catch((err) => console.log(err))
 })
 
 // 顯示 todo 項目頁
 app.get('/todos/:id', (req, res) => {
-  res.send(`get todo:${req.params.id}`)
+  const id = req.params.id
+  return Todo.findByPk(id, {
+    attributes: ['id', 'name'],
+    raw: true
+  })
+    .then((todo) => res.render('todo', { todo }))
+    .catch((err) => console.log(err))
 })
 
 // 更新 todo 頁
